@@ -7,41 +7,41 @@ export interface Account {
 }
 export interface Allowance {
   'allowance' : bigint,
-  'expires_at' : [] | [bigint],
+  'expires_at' : [] | [Timestamp],
 }
 export interface AllowanceArgs { 'account' : Account, 'spender' : Account }
 export interface Approve {
   'fee' : [] | [bigint],
   'from' : Account,
   'memo' : [] | [Uint8Array | number[]],
-  'created_at_time' : [] | [bigint],
+  'created_at_time' : [] | [Timestamp],
   'amount' : bigint,
   'expected_allowance' : [] | [bigint],
-  'expires_at' : [] | [bigint],
+  'expires_at' : [] | [Timestamp],
   'spender' : Account,
 }
 export interface ApproveArgs {
   'fee' : [] | [bigint],
   'memo' : [] | [Uint8Array | number[]],
   'from_subaccount' : [] | [Uint8Array | number[]],
-  'created_at_time' : [] | [bigint],
+  'created_at_time' : [] | [Timestamp],
   'amount' : bigint,
   'expected_allowance' : [] | [bigint],
-  'expires_at' : [] | [bigint],
+  'expires_at' : [] | [Timestamp],
   'spender' : Account,
 }
 export type ApproveError = {
     'GenericError' : { 'message' : string, 'error_code' : bigint }
   } |
   { 'TemporarilyUnavailable' : null } |
-  { 'Duplicate' : { 'duplicate_of' : bigint } } |
+  { 'Duplicate' : { 'duplicate_of' : BlockIndex } } |
   { 'BadFee' : { 'expected_fee' : bigint } } |
   { 'AllowanceChanged' : { 'current_allowance' : bigint } } |
-  { 'CreatedInFuture' : { 'ledger_time' : bigint } } |
+  { 'CreatedInFuture' : { 'ledger_time' : Timestamp } } |
   { 'TooOld' : null } |
-  { 'Expired' : { 'ledger_time' : bigint } } |
+  { 'Expired' : { 'ledger_time' : Timestamp } } |
   { 'InsufficientFunds' : { 'balance' : bigint } };
-export type ApproveResult = { 'Ok' : bigint } |
+export type ApproveResult = { 'Ok' : BlockIndex } |
   { 'Err' : ApproveError };
 export type Block = Value;
 export type BlockIndex = bigint;
@@ -49,7 +49,7 @@ export interface BlockRange { 'blocks' : Array<Block> }
 export interface Burn {
   'from' : Account,
   'memo' : [] | [Uint8Array | number[]],
-  'created_at_time' : [] | [bigint],
+  'created_at_time' : [] | [Timestamp],
   'amount' : bigint,
   'spender' : [] | [Account],
 }
@@ -128,7 +128,7 @@ export type MetadataValue = { 'Int' : bigint } |
 export interface Mint {
   'to' : Account,
   'memo' : [] | [Uint8Array | number[]],
-  'created_at_time' : [] | [bigint],
+  'created_at_time' : [] | [Timestamp],
   'amount' : bigint,
 }
 export type QueryArchiveFn = ActorMethod<
@@ -145,7 +145,7 @@ export interface Transaction {
   'kind' : string,
   'mint' : [] | [Mint],
   'approve' : [] | [Approve],
-  'timestamp' : bigint,
+  'timestamp' : Timestamp,
   'transfer' : [] | [Transfer],
 }
 export interface TransactionRange { 'transactions' : Array<Transaction> }
@@ -154,7 +154,7 @@ export interface Transfer {
   'fee' : [] | [bigint],
   'from' : Account,
   'memo' : [] | [Uint8Array | number[]],
-  'created_at_time' : [] | [bigint],
+  'created_at_time' : [] | [Timestamp],
   'amount' : bigint,
   'spender' : [] | [Account],
 }
@@ -173,7 +173,7 @@ export type TransferError = {
   { 'BadBurn' : { 'min_burn_amount' : Tokens } } |
   { 'Duplicate' : { 'duplicate_of' : BlockIndex } } |
   { 'BadFee' : { 'expected_fee' : Tokens } } |
-  { 'CreatedInFuture' : { 'ledger_time' : bigint } } |
+  { 'CreatedInFuture' : { 'ledger_time' : Timestamp } } |
   { 'TooOld' : null } |
   { 'InsufficientFunds' : { 'balance' : Tokens } };
 export interface TransferFromArgs {
@@ -193,7 +193,7 @@ export type TransferFromError = {
   { 'BadBurn' : { 'min_burn_amount' : Tokens } } |
   { 'Duplicate' : { 'duplicate_of' : BlockIndex } } |
   { 'BadFee' : { 'expected_fee' : Tokens } } |
-  { 'CreatedInFuture' : { 'ledger_time' : bigint } } |
+  { 'CreatedInFuture' : { 'ledger_time' : Timestamp } } |
   { 'TooOld' : null } |
   { 'InsufficientFunds' : { 'balance' : Tokens } };
 export type TransferFromResult = { 'Ok' : BlockIndex } |

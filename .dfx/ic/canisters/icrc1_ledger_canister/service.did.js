@@ -51,27 +51,28 @@ export const idlFactory = ({ IDL }) => {
     'owner' : IDL.Principal,
     'subaccount' : IDL.Opt(Subaccount),
   });
+  const Timestamp = IDL.Nat64;
   const Burn = IDL.Record({
     'from' : Account,
     'memo' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time' : IDL.Opt(IDL.Nat64),
+    'created_at_time' : IDL.Opt(Timestamp),
     'amount' : IDL.Nat,
     'spender' : IDL.Opt(Account),
   });
   const Mint = IDL.Record({
     'to' : Account,
     'memo' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time' : IDL.Opt(IDL.Nat64),
+    'created_at_time' : IDL.Opt(Timestamp),
     'amount' : IDL.Nat,
   });
   const Approve = IDL.Record({
     'fee' : IDL.Opt(IDL.Nat),
     'from' : Account,
     'memo' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time' : IDL.Opt(IDL.Nat64),
+    'created_at_time' : IDL.Opt(Timestamp),
     'amount' : IDL.Nat,
     'expected_allowance' : IDL.Opt(IDL.Nat),
-    'expires_at' : IDL.Opt(IDL.Nat64),
+    'expires_at' : IDL.Opt(Timestamp),
     'spender' : Account,
   });
   const Transfer = IDL.Record({
@@ -79,7 +80,7 @@ export const idlFactory = ({ IDL }) => {
     'fee' : IDL.Opt(IDL.Nat),
     'from' : Account,
     'memo' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time' : IDL.Opt(IDL.Nat64),
+    'created_at_time' : IDL.Opt(Timestamp),
     'amount' : IDL.Nat,
     'spender' : IDL.Opt(Account),
   });
@@ -88,7 +89,7 @@ export const idlFactory = ({ IDL }) => {
     'kind' : IDL.Text,
     'mint' : IDL.Opt(Mint),
     'approve' : IDL.Opt(Approve),
-    'timestamp' : IDL.Nat64,
+    'timestamp' : Timestamp,
     'transfer' : IDL.Opt(Transfer),
   });
   const TransactionRange = IDL.Record({
@@ -119,7 +120,6 @@ export const idlFactory = ({ IDL }) => {
     'Text' : IDL.Text,
   });
   const StandardRecord = IDL.Record({ 'url' : IDL.Text, 'name' : IDL.Text });
-  const Timestamp = IDL.Nat64;
   const TransferArg = IDL.Record({
     'to' : Account,
     'fee' : IDL.Opt(Tokens),
@@ -137,7 +137,7 @@ export const idlFactory = ({ IDL }) => {
     'BadBurn' : IDL.Record({ 'min_burn_amount' : Tokens }),
     'Duplicate' : IDL.Record({ 'duplicate_of' : BlockIndex }),
     'BadFee' : IDL.Record({ 'expected_fee' : Tokens }),
-    'CreatedInFuture' : IDL.Record({ 'ledger_time' : IDL.Nat64 }),
+    'CreatedInFuture' : IDL.Record({ 'ledger_time' : Timestamp }),
     'TooOld' : IDL.Null,
     'InsufficientFunds' : IDL.Record({ 'balance' : Tokens }),
   });
@@ -151,16 +151,16 @@ export const idlFactory = ({ IDL }) => {
   });
   const Allowance = IDL.Record({
     'allowance' : IDL.Nat,
-    'expires_at' : IDL.Opt(IDL.Nat64),
+    'expires_at' : IDL.Opt(Timestamp),
   });
   const ApproveArgs = IDL.Record({
     'fee' : IDL.Opt(IDL.Nat),
     'memo' : IDL.Opt(IDL.Vec(IDL.Nat8)),
     'from_subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'created_at_time' : IDL.Opt(IDL.Nat64),
+    'created_at_time' : IDL.Opt(Timestamp),
     'amount' : IDL.Nat,
     'expected_allowance' : IDL.Opt(IDL.Nat),
-    'expires_at' : IDL.Opt(IDL.Nat64),
+    'expires_at' : IDL.Opt(Timestamp),
     'spender' : Account,
   });
   const ApproveError = IDL.Variant({
@@ -169,15 +169,18 @@ export const idlFactory = ({ IDL }) => {
       'error_code' : IDL.Nat,
     }),
     'TemporarilyUnavailable' : IDL.Null,
-    'Duplicate' : IDL.Record({ 'duplicate_of' : IDL.Nat }),
+    'Duplicate' : IDL.Record({ 'duplicate_of' : BlockIndex }),
     'BadFee' : IDL.Record({ 'expected_fee' : IDL.Nat }),
     'AllowanceChanged' : IDL.Record({ 'current_allowance' : IDL.Nat }),
-    'CreatedInFuture' : IDL.Record({ 'ledger_time' : IDL.Nat64 }),
+    'CreatedInFuture' : IDL.Record({ 'ledger_time' : Timestamp }),
     'TooOld' : IDL.Null,
-    'Expired' : IDL.Record({ 'ledger_time' : IDL.Nat64 }),
+    'Expired' : IDL.Record({ 'ledger_time' : Timestamp }),
     'InsufficientFunds' : IDL.Record({ 'balance' : IDL.Nat }),
   });
-  const ApproveResult = IDL.Variant({ 'Ok' : IDL.Nat, 'Err' : ApproveError });
+  const ApproveResult = IDL.Variant({
+    'Ok' : BlockIndex,
+    'Err' : ApproveError,
+  });
   const TransferFromArgs = IDL.Record({
     'to' : Account,
     'fee' : IDL.Opt(Tokens),
@@ -197,7 +200,7 @@ export const idlFactory = ({ IDL }) => {
     'BadBurn' : IDL.Record({ 'min_burn_amount' : Tokens }),
     'Duplicate' : IDL.Record({ 'duplicate_of' : BlockIndex }),
     'BadFee' : IDL.Record({ 'expected_fee' : Tokens }),
-    'CreatedInFuture' : IDL.Record({ 'ledger_time' : IDL.Nat64 }),
+    'CreatedInFuture' : IDL.Record({ 'ledger_time' : Timestamp }),
     'TooOld' : IDL.Null,
     'InsufficientFunds' : IDL.Record({ 'balance' : Tokens }),
   });

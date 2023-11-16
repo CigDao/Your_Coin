@@ -1,8 +1,8 @@
 {
-  "icrc1": {
-    "staging": "qi47s-nyaaa-aaaap-ablma-cai"
-  },
   "icrc1_ledger_canister": {
     "ic": "onxlw-tiaaa-aaaan-qedoq-cai"
+  },
+  "token": {
+    "ic": "t2hbe-cqaaa-aaaan-qenha-cai"
   }
 }
