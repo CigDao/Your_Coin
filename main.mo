@@ -28,10 +28,9 @@ shared ({ caller = _owner }) actor class Token(
     });
 
     let dev = Principal.fromText("i47jd-kewyq-vcner-l4xf7-edf77-aw4xp-u2kpb-2qai2-6ie7k-tcngl-oqe");
-
     /// Functions for the ICRC1 token standard
 
-    public shared ({ caller }) func airdrop() : async () {
+    /*public shared ({ caller }) func airdrop() : async () {
         assert (caller == dev);
         var _balances : Buffer.Buffer<(ICRC1.Account, ICRC1.Balance)> = Buffer.fromArray([]);
         let holders = await _getHolders();
@@ -71,11 +70,11 @@ shared ({ caller = _owner }) actor class Token(
                 },
             );
         });
-    };
+    };*/
 
-    public shared ({ caller }) func icrc1_snap_shot() : async () {
+    /*public shared ({ caller }) func icrc1_snap_shot() : async () {
+        assert(caller == dev);
         let sonic = Principal.fromText("tpqyu-cs7yl-qyntm-pxmiy-r26zg-ye5fo-m4smt-nizfj-47u75-gk25q-wae");
-        assert (caller == dev);
         let sonicMintArgs = {
             to = { owner = sonic; subaccount = null };
             amount = 10000000000005000000;
@@ -84,10 +83,10 @@ shared ({ caller = _owner }) actor class Token(
         };
         ignore await ICRC1.mint(token, sonicMintArgs, dev);
         let request = { start = 0; length = 1000000 };
-        let transactions = (await ICRC.service("onxlw-tiaaa-aaaan-qedoq-cai").get_transactions(request)).transactions;
+        let transactions = (await ICRC.service("t2hbe-cqaaa-aaaan-qenha-cai").get_transactions(request)).transactions;
         for (transaction in transactions.vals()) {
             switch (transaction.kind) {
-                case ("mint") {
+                case ("MINT") {
                     switch (transaction.mint) {
                         case (?mint) {
                             let args = {
@@ -103,7 +102,7 @@ shared ({ caller = _owner }) actor class Token(
                         };
                     };
                 };
-                case ("transfer") {
+                case ("TRANSFER") {
                     switch (transaction.transfer) {
                         case (?transfer) {
                             let args = {
@@ -124,7 +123,7 @@ shared ({ caller = _owner }) actor class Token(
                         };
                     };
                 };
-                case ("burn") {
+                case ("BURN") {
                     switch (transaction.burn) {
                         case (?burn) {
                             let args = {
@@ -147,9 +146,9 @@ shared ({ caller = _owner }) actor class Token(
                 };
             };
         };
-    };
+    };*/
 
-    stable var drops : [(Principal, Nat)] = [];
+    /*stable var drops : [(Principal, Nat)] = [];
 
     public query func fetchDrops() : async [(Principal, Nat)] {
         drops;
@@ -175,7 +174,7 @@ shared ({ caller = _owner }) actor class Token(
             if (validHolder == true) amount := amount + balance;
         };
         amount;
-    };
+    };*/
 
     /*public shared ({ caller }) func airdrop(token : Text) : async () {
         let dev = Principal.fromText("i47jd-kewyq-vcner-l4xf7-edf77-aw4xp-u2kpb-2qai2-6ie7k-tcngl-oqe");
@@ -188,7 +187,7 @@ shared ({ caller = _owner }) actor class Token(
         };
     };*/
 
-    private func _getHolderCount() : async Nat {
+    /*private func _getHolderCount() : async Nat {
         let tokenInfo = await Dip20.service(Constants.OLD_YC_CANISTER).getTokenInfo();
         tokenInfo.holderNumber;
     };
@@ -214,7 +213,7 @@ shared ({ caller = _owner }) actor class Token(
             if (holder == principal) result := false;
         };
         result;
-    };
+    };*/
 
     public query func getMemorySize() : async Nat {
         let size = Prim.rts_memory_size();
