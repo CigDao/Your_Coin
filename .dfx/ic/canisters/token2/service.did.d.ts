@@ -65,13 +65,8 @@ export type Subaccount = Uint8Array | number[];
 export interface SupportedStandard { 'url' : string, 'name' : string }
 export type Timestamp = bigint;
 export interface Token {
-  'airdrop' : ActorMethod<[], undefined>,
   'burn' : ActorMethod<[BurnArgs], TransferResult>,
-  'claimRemaining' : ActorMethod<[], undefined>,
   'deposit_cycles' : ActorMethod<[], undefined>,
-  'dropsSize' : ActorMethod<[], bigint>,
-  'fetchDrops' : ActorMethod<[], Array<[Principal, bigint]>>,
-  'getAirDropAmount' : ActorMethod<[], bigint>,
   'getCycles' : ActorMethod<[], bigint>,
   'getHeapSize' : ActorMethod<[], bigint>,
   'getMemorySize' : ActorMethod<[], bigint>,

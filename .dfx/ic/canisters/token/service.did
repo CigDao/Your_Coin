@@ -52,8 +52,16 @@ type Subaccount = vec nat8;
 type SupportedStandard = record { url : text; name : text };
 type Timestamp = nat64;
 type Token = service {
+  airdrop : () -> ();
   burn : (BurnArgs) -> (TransferResult);
+  claimRemaining : () -> ();
   deposit_cycles : () -> ();
+  dropsSize : () -> (nat) query;
+  fetchDrops : () -> (vec record { principal; nat }) query;
+  getAirDropAmount : () -> (nat);
+  getCycles : () -> (nat) query;
+  getHeapSize : () -> (nat) query;
+  getMemorySize : () -> (nat) query;
   get_transaction : (TxIndex__1) -> (opt Transaction__1);
   get_transactions : (GetTransactionsRequest) -> (
       GetTransactionsResponse,

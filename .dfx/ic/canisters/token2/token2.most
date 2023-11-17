@@ -58,8 +58,7 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type TxIndex = Nat;
 type Value = {#Blob : Blob; #Int : Int; #Nat : Nat; #Text : Text};
 actor {
-  stable var drops : [(Principal, Nat)];
-  stable var token :
+  stable token :
     {
       var _burned_tokens : Balance;
       var _fee : Balance;

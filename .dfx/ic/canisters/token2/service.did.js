@@ -119,17 +119,8 @@ export const idlFactory = ({ IDL }) => {
     'amount' : Balance,
   });
   const Token = IDL.Service({
-    'airdrop' : IDL.Func([], [], []),
     'burn' : IDL.Func([BurnArgs], [TransferResult], []),
-    'claimRemaining' : IDL.Func([], [], []),
     'deposit_cycles' : IDL.Func([], [], []),
-    'dropsSize' : IDL.Func([], [IDL.Nat], ['query']),
-    'fetchDrops' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat))],
-        ['query'],
-      ),
-    'getAirDropAmount' : IDL.Func([], [IDL.Nat], []),
     'getCycles' : IDL.Func([], [IDL.Nat], ['query']),
     'getHeapSize' : IDL.Func([], [IDL.Nat], ['query']),
     'getMemorySize' : IDL.Func([], [IDL.Nat], ['query']),

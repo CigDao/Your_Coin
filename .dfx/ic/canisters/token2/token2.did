@@ -78,6 +78,29 @@ type TokenInitArgs =
    name: text;
    symbol: text;
  };
+type Token = 
+ service {
+   burn: (BurnArgs) -> (TransferResult);
+   deposit_cycles: () -> ();
+   getCycles: () -> (nat) query;
+   getHeapSize: () -> (nat) query;
+   getMemorySize: () -> (nat) query;
+   get_transaction: (TxIndex__1) -> (opt Transaction__1);
+   get_transactions: (GetTransactionsRequest) ->
+    (GetTransactionsResponse) query;
+   icrc1_balance_of: (Account__1) -> (Balance__1) query;
+   icrc1_decimals: () -> (nat8) query;
+   icrc1_fee: () -> (Balance__1) query;
+   icrc1_metadata: () -> (vec MetaDatum) query;
+   icrc1_minting_account: () -> (opt Account__1) query;
+   icrc1_name: () -> (text) query;
+   icrc1_snap_shot: () -> ();
+   icrc1_supported_standards: () -> (vec SupportedStandard) query;
+   icrc1_symbol: () -> (text) query;
+   icrc1_total_supply: () -> (Balance__1) query;
+   icrc1_transfer: (TransferArgs) -> (TransferResult);
+   mint: (Mint) -> (TransferResult);
+ };
 type Timestamp = nat64;
 type SupportedStandard = 
  record {
@@ -161,33 +184,4 @@ type Account =
    owner: principal;
    subaccount: opt Subaccount;
  };
-service : {
-  airdrop: () -> ();
-  burn: (BurnArgs) -> (TransferResult);
-  claimRemaining: () -> ();
-  deposit_cycles: () -> ();
-  dropsSize: () -> (nat) query;
-  fetchDrops: () -> (vec record {
-                           principal;
-                           nat;
-                         }) query;
-  getAirDropAmount: () -> (nat);
-  getCycles: () -> (nat) query;
-  getHeapSize: () -> (nat) query;
-  getMemorySize: () -> (nat) query;
-  get_transaction: (TxIndex__1) -> (opt Transaction__1);
-  get_transactions: (GetTransactionsRequest) ->
-   (GetTransactionsResponse) query;
-  icrc1_balance_of: (Account__1) -> (Balance__1) query;
-  icrc1_decimals: () -> (nat8) query;
-  icrc1_fee: () -> (Balance__1) query;
-  icrc1_metadata: () -> (vec MetaDatum) query;
-  icrc1_minting_account: () -> (opt Account__1) query;
-  icrc1_name: () -> (text) query;
-  icrc1_snap_shot: () -> ();
-  icrc1_supported_standards: () -> (vec SupportedStandard) query;
-  icrc1_symbol: () -> (text) query;
-  icrc1_total_supply: () -> (Balance__1) query;
-  icrc1_transfer: (TransferArgs) -> (TransferResult);
-  mint: (Mint) -> (TransferResult);
-}
+service : (TokenInitArgs) -> Token

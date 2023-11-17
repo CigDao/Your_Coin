@@ -8,6 +8,10 @@
     "token": {
       "main": "./main.mo",
       "type": "motoko"
+    },
+    "token2": {
+      "main": "./main.mo",
+      "type": "motoko"
     }
   },
   "defaults": {

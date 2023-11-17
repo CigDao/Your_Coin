@@ -162,16 +162,8 @@ type Account =
    subaccount: opt Subaccount;
  };
 service : {
-  airdrop: () -> ();
   burn: (BurnArgs) -> (TransferResult);
-  claimRemaining: () -> ();
   deposit_cycles: () -> ();
-  dropsSize: () -> (nat) query;
-  fetchDrops: () -> (vec record {
-                           principal;
-                           nat;
-                         }) query;
-  getAirDropAmount: () -> (nat);
   getCycles: () -> (nat) query;
   getHeapSize: () -> (nat) query;
   getMemorySize: () -> (nat) query;
