@@ -162,16 +162,8 @@ type Account =
    subaccount: opt Subaccount;
  };
 service : {
-  airdrop: () -> ();
   burn: (BurnArgs) -> (TransferResult);
-  claimRemaining: () -> ();
   deposit_cycles: () -> ();
-  dropsSize: () -> (nat) query;
-  fetchDrops: () -> (vec record {
-                           principal;
-                           nat;
-                         }) query;
-  getAirDropAmount: () -> (nat);
   getCycles: () -> (nat) query;
   getHeapSize: () -> (nat) query;
   getMemorySize: () -> (nat) query;
@@ -184,7 +176,6 @@ service : {
   icrc1_metadata: () -> (vec MetaDatum) query;
   icrc1_minting_account: () -> (opt Account__1) query;
   icrc1_name: () -> (text) query;
-  icrc1_snap_shot: () -> ();
   icrc1_supported_standards: () -> (vec SupportedStandard) query;
   icrc1_symbol: () -> (text) query;
   icrc1_total_supply: () -> (Balance__1) query;

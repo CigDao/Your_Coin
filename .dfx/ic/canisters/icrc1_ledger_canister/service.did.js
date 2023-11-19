@@ -119,17 +119,8 @@ export const idlFactory = ({ IDL }) => {
     'amount' : Balance,
   });
   const Token = IDL.Service({
-    'airdrop' : IDL.Func([], [], []),
     'burn' : IDL.Func([BurnArgs], [TransferResult], []),
-    'claimRemaining' : IDL.Func([], [], []),
     'deposit_cycles' : IDL.Func([], [], []),
-    'dropsSize' : IDL.Func([], [IDL.Nat], ['query']),
-    'fetchDrops' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat))],
-        ['query'],
-      ),
-    'getAirDropAmount' : IDL.Func([], [IDL.Nat], []),
     'getCycles' : IDL.Func([], [IDL.Nat], ['query']),
     'getHeapSize' : IDL.Func([], [IDL.Nat], ['query']),
     'getMemorySize' : IDL.Func([], [IDL.Nat], ['query']),
@@ -145,7 +136,6 @@ export const idlFactory = ({ IDL }) => {
     'icrc1_metadata' : IDL.Func([], [IDL.Vec(MetaDatum)], ['query']),
     'icrc1_minting_account' : IDL.Func([], [IDL.Opt(Account__1)], ['query']),
     'icrc1_name' : IDL.Func([], [IDL.Text], ['query']),
-    'icrc1_snap_shot' : IDL.Func([], [], []),
     'icrc1_supported_standards' : IDL.Func(
         [],
         [IDL.Vec(SupportedStandard)],

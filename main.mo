@@ -8,6 +8,8 @@ import Array "mo:base/Array";
 import Principal "mo:base/Principal";
 import Error "mo:base/Error";
 import Buffer "mo:base/Buffer";
+import Text "mo:base/Text";
+import Char "mo:base/Char";
 import ICRC "./services/ICRC";
 import Prim "mo:prim";
 import Dip20 "./services/Dip20";
@@ -70,9 +72,9 @@ shared ({ caller = _owner }) actor class Token(
                 },
             );
         });
-    };*/
+    };
 
-    /*public shared ({ caller }) func icrc1_snap_shot() : async () {
+    public shared ({ caller }) func icrc1_snap_shot() : async () {
         assert(caller == dev);
         let sonic = Principal.fromText("tpqyu-cs7yl-qyntm-pxmiy-r26zg-ye5fo-m4smt-nizfj-47u75-gk25q-wae");
         let sonicMintArgs = {
@@ -187,7 +189,7 @@ shared ({ caller = _owner }) actor class Token(
         };
     };*/
 
-    /*private func _getHolderCount() : async Nat {
+    private func _getHolderCount() : async Nat {
         let tokenInfo = await Dip20.service(Constants.OLD_YC_CANISTER).getTokenInfo();
         tokenInfo.holderNumber;
     };
@@ -213,7 +215,7 @@ shared ({ caller = _owner }) actor class Token(
             if (holder == principal) result := false;
         };
         result;
-    };*/
+    };
 
     public query func getMemorySize() : async Nat {
         let size = Prim.rts_memory_size();
@@ -271,7 +273,7 @@ shared ({ caller = _owner }) actor class Token(
         ?ICRC1.minting_account(token);
     };
 
-    public shared query func icrc1_balance_of(args : ICRC1.Account) : async ICRC1.Balance {
+    public query func icrc1_balance_of(args : ICRC1.Account) : async ICRC1.Balance {
         ICRC1.balance_of(token, args);
     };
 
@@ -280,7 +282,22 @@ shared ({ caller = _owner }) actor class Token(
     };
 
     public shared ({ caller }) func icrc1_transfer(args : ICRC1.TransferArgs) : async ICRC1.TransferResult {
-        await ICRC1.transfer(token, args, caller);
+        switch (args.fee) {
+            case (?fee) {
+                await ICRC1.transfer(token, args, caller);
+            };
+            case (_) {
+                let _args = {
+                    amount = args.amount;
+                    created_at_time = args.created_at_time;
+                    fee = ?1000000;
+                    from_subaccount = args.from_subaccount;
+                    memo = args.memo;
+                    to = args.to;
+                };
+                await ICRC1.transfer(token, args, caller);
+            };
+        };
     };
 
     public shared ({ caller }) func mint(args : ICRC1.Mint) : async ICRC1.TransferResult {
@@ -293,12 +310,47 @@ shared ({ caller = _owner }) actor class Token(
 
     // Functions from the rosetta icrc1 ledger
     public shared query func get_transactions(req : ICRC1.GetTransactionsRequest) : async ICRC1.GetTransactionsResponse {
+        /*if (req.length < 100) {
+            let request = { length = 100; start = req.start };
+            let response = ICRC1.get_transactions(token, request);
+            {
+                /// The number of valid transactions in the ledger and archived canisters that are in the given range
+                log_length = response.log_length;
+
+                /// the index of the first tx in the `transactions` field
+                first_index = response.first_index;
+
+                /// The transactions in the ledger canister that are in the given range
+                transactions = _normalizeTransactions(response.transactions);
+
+                /// Pagination request for archived transactions in the given range
+                archived_transactions = response.archived_transactions;
+            };
+        } else {
+            ICRC1.get_transactions(token, req);
+        };*/
         ICRC1.get_transactions(token, req);
     };
 
     // Additional functions not included in the ICRC1 standard
     public shared func get_transaction(i : ICRC1.TxIndex) : async ?ICRC1.Transaction {
-        await ICRC1.get_transaction(token, i);
+        let transaction = await ICRC1.get_transaction(token, i);
+        /*switch (transaction) {
+            case (?transaction) {
+                ?{
+                    kind = _toLowerCase(transaction.kind);
+                    mint = transaction.mint;
+                    burn = transaction.burn;
+                    transfer = transaction.transfer;
+                    index = transaction.index;
+                    timestamp = transaction.timestamp;
+                };
+            };
+            case (_) {
+                null;
+            };
+        };*/
+        transaction;
     };
 
     // Deposit cycles into this archive canister.
@@ -306,5 +358,30 @@ shared ({ caller = _owner }) actor class Token(
         let amount = ExperimentalCycles.available();
         let accepted = ExperimentalCycles.accept(amount);
         assert (accepted == amount);
+    };
+
+    private func _normalizeTransactions(transactions : [ICRC1.Transaction]) : [ICRC1.Transaction] {
+        let temp = Array.map(
+            transactions,
+            func(i : ICRC1.Transaction) : ICRC1.Transaction {
+                let _temp = {
+                    kind = _toLowerCase(i.kind);
+                    mint = i.mint;
+                    burn = i.burn;
+                    transfer = i.transfer;
+                    index = i.index;
+                    timestamp = i.timestamp;
+                };
+            },
+        );
+    };
+
+    private func _toLowerCase(value : Text) : Text {
+        let chars = Text.toIter(value);
+        var lower = "";
+        for (c : Char in chars) {
+            lower := Text.concat(lower, Char.toText(Prim.charToLower(c)));
+        };
+        return lower;
     };
 };
