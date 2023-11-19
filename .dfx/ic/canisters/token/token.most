@@ -5,11 +5,21 @@ type ArchiveData = {var canister : ArchiveInterface; var stored_txs : Nat};
 type ArchiveInterface =
   actor {
     append_transactions : shared [Transaction] -> async Result<(), Text>;
+    get_first_tx : shared query () -> async Nat;
+    get_last_tx : shared query () -> async Nat;
+    get_next_archive : shared query () -> async ArchiveInterface;
+    get_prev_archive : shared query () -> async ArchiveInterface;
     get_transaction : shared query TxIndex -> async ?Transaction;
     get_transactions :
       shared query GetTransactionsRequest -> async TransactionRange;
+    max_memory : shared query () -> async Nat;
     remaining_capacity : shared query () -> async Nat;
-    total_transactions : shared query () -> async Nat
+    set_first_tx : shared Nat -> async Result<(), Text>;
+    set_last_tx : shared Nat -> async Result<(), Text>;
+    set_next_archive : shared ArchiveInterface -> async Result<(), Text>;
+    set_prev_archive : shared ArchiveInterface -> async Result<(), Text>;
+    total_transactions : shared query () -> async Nat;
+    total_used : shared query () -> async Nat
   };
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
@@ -58,23 +68,23 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type TxIndex = Nat;
 type Value = {#Blob : Blob; #Int : Int; #Nat : Nat; #Text : Text};
 actor {
-  stable var drops : [(Principal, Nat)];
   stable var token :
     {
       var _burned_tokens : Balance;
+      var _decimals : Nat8;
       var _fee : Balance;
+      var _logo : Text;
+      var _min_burn_amount : Balance;
       var _minted_tokens : Balance;
+      var _minting_account : Account;
+      var _name : Text;
+      var _symbol : Text;
       accounts : AccountBalances;
       archive : ArchiveData;
-      decimals : Nat8;
       max_supply : Balance;
       metadata : StableBuffer__1<MetaDatum>;
-      min_burn_amount : Balance;
-      minting_account : Account;
-      name : Text;
       permitted_drift : Nat;
       supported_standards : StableBuffer__1<SupportedStandard>;
-      symbol : Text;
       transaction_window : Nat;
       transactions : StableBuffer__1<Transaction>
     }

@@ -282,22 +282,7 @@ shared ({ caller = _owner }) actor class Token(
     };
 
     public shared ({ caller }) func icrc1_transfer(args : ICRC1.TransferArgs) : async ICRC1.TransferResult {
-        switch (args.fee) {
-            case (?fee) {
-                await ICRC1.transfer(token, args, caller);
-            };
-            case (_) {
-                let _args = {
-                    amount = args.amount;
-                    created_at_time = args.created_at_time;
-                    fee = ?1000000;
-                    from_subaccount = args.from_subaccount;
-                    memo = args.memo;
-                    to = args.to;
-                };
-                await ICRC1.transfer(token, args, caller);
-            };
-        };
+        await ICRC1.transfer(token, args, caller);
     };
 
     public shared ({ caller }) func mint(args : ICRC1.Mint) : async ICRC1.TransferResult {

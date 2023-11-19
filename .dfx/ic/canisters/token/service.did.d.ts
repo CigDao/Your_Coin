@@ -65,13 +65,8 @@ export type Subaccount = Uint8Array | number[];
 export interface SupportedStandard { 'url' : string, 'name' : string }
 export type Timestamp = bigint;
 export interface Token {
-  'airdrop' : ActorMethod<[], undefined>,
   'burn' : ActorMethod<[BurnArgs], TransferResult>,
-  'claimRemaining' : ActorMethod<[], undefined>,
   'deposit_cycles' : ActorMethod<[], undefined>,
-  'dropsSize' : ActorMethod<[], bigint>,
-  'fetchDrops' : ActorMethod<[], Array<[Principal, bigint]>>,
-  'getAirDropAmount' : ActorMethod<[], bigint>,
   'getCycles' : ActorMethod<[], bigint>,
   'getHeapSize' : ActorMethod<[], bigint>,
   'getMemorySize' : ActorMethod<[], bigint>,
@@ -86,7 +81,6 @@ export interface Token {
   'icrc1_metadata' : ActorMethod<[], Array<MetaDatum>>,
   'icrc1_minting_account' : ActorMethod<[], [] | [Account__1]>,
   'icrc1_name' : ActorMethod<[], string>,
-  'icrc1_snap_shot' : ActorMethod<[], undefined>,
   'icrc1_supported_standards' : ActorMethod<[], Array<SupportedStandard>>,
   'icrc1_symbol' : ActorMethod<[], string>,
   'icrc1_total_supply' : ActorMethod<[], Balance__1>,
@@ -98,6 +92,7 @@ export interface TokenInitArgs {
   'advanced_settings' : [] | [AdvancedSettings],
   'decimals' : number,
   'minting_account' : [] | [Account],
+  'logo' : string,
   'name' : string,
   'initial_balances' : Array<[Account, Balance]>,
   'min_burn_amount' : Balance,
